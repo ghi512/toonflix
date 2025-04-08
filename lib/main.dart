@@ -5,6 +5,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,9 +43,7 @@ class MyApp extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
-                height: 120
-              ),
+              SizedBox(height: 120),
               Text(
                 'Total Balance',
                 style: TextStyle(
@@ -51,9 +51,7 @@ class MyApp extends StatelessWidget {
                   color: Colors.white.withOpacity(0.8),
                 ),
               ),
-              SizedBox(
-                height: 5
-                ),
+              SizedBox(height: 5),
               Text(
                 '\$ 5 194 482',
                 style: TextStyle(
@@ -62,12 +60,10 @@ class MyApp extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 30),
               Row(
                 children: [
-                   Container(
+                  Container(
                     decoration: BoxDecoration(
                       color: Color(0xFFF2B33A),
                       borderRadius: BorderRadius.circular(45),
@@ -77,15 +73,11 @@ class MyApp extends StatelessWidget {
                         vertical: 20,
                         horizontal: 50,
                       ),
-                      child: Text('Transfer',
-                      style: TextStyle(
-                        fontSize: 20 ,
-                      ),
-                      ),
+                      child: Text('Transfer', style: TextStyle(fontSize: 20)),
                     ),
-                   )
+                  ),
                 ],
-              ), 
+              ),
             ],
           ),
         ),
