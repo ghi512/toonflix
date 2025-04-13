@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix/models/webtoon_detail_model.dart';
+import 'package:toonflix/models/webtoon_episode_model.dart';
+import 'package:toonflix/services/api_service.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
   final String title, thumb, id;
 
   const DetailPage({
@@ -9,6 +12,21 @@ class DetailPage extends StatelessWidget {
     required this.thumb,
     required this.id,
   });
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  late Future<WebtoonDetailModel> webtoon;
+  late Future<List<WebtoonEpisodeModel>> episodes;
+
+  @override
+  void initState() {
+    super.initState();
+    webtoon = ApiService.getToonById(widget.id);
+    episodes = ApiService.getLatestEpisodesById(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +38,7 @@ class DetailPage extends StatelessWidget {
         foregroundColor: Colors.green,
         shadowColor: Colors.black,
         title: Text(
-          title,
+          widget.title,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
         ),
       ),
@@ -31,7 +49,7 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Hero(
-                tag: id,
+                tag: widget.id,
                 child: Container(
                   clipBehavior: Clip.hardEdge,
                   width: 250,
@@ -46,7 +64,7 @@ class DetailPage extends StatelessWidget {
                     ],
                   ),
                   child: Image.network(
-                    thumb,
+                    widget.thumb,
                     headers: const {'Referer': 'https://comic.naver.com'},
                   ),
                 ),
