@@ -42,62 +42,107 @@ class _DetailPageState extends State<DetailPage> {
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Column(
             children: [
-              Hero(
-                tag: widget.id,
-                child: Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 15,
-                        offset: Offset(10, 10),
-                        color: Colors.black.withOpacity(0.5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Hero(
+                    tag: widget.id,
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      width: 250,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 15,
+                            offset: Offset(10, 10),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
                       ),
-                    ],
+                      child: Image.network(
+                        widget.thumb,
+                        headers: const {'Referer': 'https://comic.naver.com'},
+                      ),
+                    ),
                   ),
-                  child: Image.network(
-                    widget.thumb,
-                    headers: const {'Referer': 'https://comic.naver.com'},
-                  ),
-                ),
+                ],
+              ),
+              SizedBox(height: 25),
+              FutureBuilder(
+                future: webtoon,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data!.about,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        SizedBox(height: 15),
+                        Text(
+                          '${snapshot.data!.genre} / ${snapshot.data!.age}',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    );
+                  }
+                  return Text("...");
+                },
+              ),
+              SizedBox(height: 25),
+              FutureBuilder(
+                future: episodes,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        for (var episode in snapshot.data!)
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.green.shade400,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    episode.title,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               ),
             ],
           ),
-          SizedBox(height: 25),
-          FutureBuilder(
-            future: webtoon,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        snapshot.data!.about,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                      SizedBox(height: 15),
-                      Text(
-                        '${snapshot.data!.genre} / ${snapshot.data!.age}',
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return Text("...");
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
